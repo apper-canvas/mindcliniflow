@@ -59,7 +59,7 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
         status: appointment.status || 'scheduled'
       })
     } else {
-      const today = new Date()
+const today = new Date()
       setFormData({
         patientId: '',
         date: format(today, 'yyyy-MM-dd'),
@@ -69,7 +69,7 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
         notes: '',
         status: 'scheduled'
       })
-}
+    }
     setErrors({})
     setIsInteracting(false)
     setLastInteraction(Date.now())
