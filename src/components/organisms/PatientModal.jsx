@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import Button from '@/components/atoms/Button'
-import Input from '@/components/atoms/Input'
-import ApperIcon from '@/components/ApperIcon'
-import { toast } from 'react-toastify'
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
 
 const PatientModal = ({ isOpen, onClose, patient, onSave }) => {
   const [formData, setFormData] = useState({
@@ -18,33 +18,81 @@ const PatientModal = ({ isOpen, onClose, patient, onSave }) => {
   })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
+  const [isFormDirty, setIsFormDirty] = useState(false)
+  const [userActivity, setUserActivity] = useState(Date.now())
+  const modalRef = useRef(null)
+  const lastActivityRef = useRef(Date.now())
+// Track user activity to prevent auto-close
+  const updateActivity = useCallback(() => {
+    const now = Date.now()
+    setUserActivity(now)
+    lastActivityRef.current = now
+  }, [])
 
+  // Initialize form data when modal opens
   useEffect(() => {
-    if (patient) {
-      setFormData({
-        firstName: patient.firstName || '',
-        lastName: patient.lastName || '',
-        dateOfBirth: patient.dateOfBirth || '',
-        phone: patient.phone || '',
-        email: patient.email || '',
-        address: patient.address || '',
-        emergencyContact: patient.emergencyContact || '',
-        notes: patient.notes || ''
-      })
-    } else {
-      setFormData({
-        firstName: '',
-        lastName: '',
-        dateOfBirth: '',
-        phone: '',
-        email: '',
-        address: '',
-        emergencyContact: '',
-        notes: ''
-      })
+    if (isOpen) {
+      if (patient) {
+        setFormData({
+          firstName: patient.firstName || '',
+          lastName: patient.lastName || '',
+          dateOfBirth: patient.dateOfBirth || '',
+          phone: patient.phone || '',
+          email: patient.email || '',
+          address: patient.address || '',
+          emergencyContact: patient.emergencyContact || '',
+          notes: patient.notes || ''
+        })
+      } else {
+        setFormData({
+          firstName: '',
+          lastName: '',
+          dateOfBirth: '',
+          phone: '',
+          email: '',
+          address: '',
+          emergencyContact: '',
+          notes: ''
+        })
+      }
+      setErrors({})
+      setIsFormDirty(false)
+      updateActivity()
     }
-    setErrors({})
-  }, [patient, isOpen])
+  }, [patient, isOpen, updateActivity])
+
+  // Prevent auto-close by tracking activity and form state
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleActivity = () => updateActivity()
+    
+    // Add activity listeners
+    document.addEventListener('mousedown', handleActivity)
+    document.addEventListener('keydown', handleActivity)
+    document.addEventListener('scroll', handleActivity)
+    
+    return () => {
+      document.removeEventListener('mousedown', handleActivity)
+      document.removeEventListener('keydown', handleActivity)
+      document.removeEventListener('scroll', handleActivity)
+    }
+  }, [isOpen, updateActivity])
+
+  // Enhanced close handler with form state check
+  const handleClose = useCallback(() => {
+    if (loading) {
+      return // Prevent closing during save operation
+    }
+    
+    if (isFormDirty) {
+      if (window.confirm('You have unsaved changes. Are you sure you want to close?')) {
+        onClose()
+      }
+    } else {
+      onClose()
+    }
+  }, [loading, isFormDirty, onClose])
 
   const validateForm = () => {
     const newErrors = {}
@@ -85,50 +133,60 @@ const PatientModal = ({ isOpen, onClose, patient, onSave }) => {
     }
   }
 
-  const handleChange = (field, value) => {
+const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+    setIsFormDirty(true)
+    updateActivity()
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
     }
+}
   }
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-{/* Backdrop */}
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
               onClick={(e) => {
-                // Only close if clicking directly on backdrop, not on modal content
-                if (e.target === e.currentTarget) {
-                  onClose()
+                // Enhanced backdrop click handling
+                e.preventDefault()
+                e.stopPropagation()
+                if (e.target === e.currentTarget && !loading) {
+                  handleClose()
                 }
               }}
             />
-
-            {/* Modal */}
+{/* Modal */}
             <motion.div
+              ref={modalRef}
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-xl"
               onClick={(e) => {
-                // Prevent modal from closing when clicking inside the modal content
+                // Enhanced click prevention
+                e.preventDefault()
                 e.stopPropagation()
+                updateActivity()
               }}
+              onMouseDown={updateActivity}
+              onKeyDown={updateActivity}
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">
                   {patient ? 'Edit Patient' : 'Add New Patient'}
+                  {isFormDirty && <span className="text-orange-500 ml-2">*</span>}
                 </h3>
                 <button
-                  onClick={onClose}
-                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                  onClick={handleClose}
+                  disabled={loading}
+                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ApperIcon name="X" className="w-5 h-5" />
                 </button>
@@ -204,11 +262,11 @@ const PatientModal = ({ isOpen, onClose, patient, onSave }) => {
                   />
                 </div>
 
-                <div className="flex justify-end space-x-3 pt-4">
+<div className="flex justify-end space-x-3 pt-4">
                   <Button
                     type="button"
                     variant="secondary"
-                    onClick={onClose}
+                    onClick={handleClose}
                     disabled={loading}
                   >
                     Cancel
