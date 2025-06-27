@@ -97,13 +97,18 @@ const PatientModal = ({ isOpen, onClose, patient, onSave }) => {
       {isOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            {/* Backdrop */}
+{/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-              onClick={onClose}
+              onClick={(e) => {
+                // Only close if clicking directly on backdrop, not on modal content
+                if (e.target === e.currentTarget) {
+                  onClose()
+                }
+              }}
             />
 
             {/* Modal */}
@@ -112,6 +117,10 @@ const PatientModal = ({ isOpen, onClose, patient, onSave }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-xl"
+              onClick={(e) => {
+                // Prevent modal from closing when clicking inside the modal content
+                e.stopPropagation()
+              }}
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">
