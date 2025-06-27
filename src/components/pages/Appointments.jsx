@@ -89,21 +89,16 @@ const Appointments = () => {
     })
   }, [appointments, patients, searchTerm, viewMode, weekStart, weekEnd])
 
-  const handleSaveAppointment = async (appointmentData) => {
-    try {
-      if (selectedAppointment) {
-        await appointmentService.update(selectedAppointment.Id, appointmentData)
-      } else {
-        await appointmentService.create(appointmentData)
-      }
-      await loadData()
-      setShowModal(false)
-      setSelectedAppointment(null)
-    } catch (error) {
-      throw error
+const handleSaveAppointment = async (appointmentData) => {
+    if (selectedAppointment) {
+      await appointmentService.update(selectedAppointment.Id, appointmentData)
+    } else {
+      await appointmentService.create(appointmentData)
     }
+    await loadData()
+    setShowModal(false)
+    setSelectedAppointment(null)
   }
-
   const handleEditAppointment = (appointment) => {
     setSelectedAppointment(appointment)
     setShowModal(true)

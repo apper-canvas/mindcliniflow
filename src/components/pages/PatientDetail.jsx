@@ -61,15 +61,11 @@ const PatientDetail = () => {
     }
   }, [id])
 
-  const handleSavePatient = async (patientData) => {
-    try {
-      await patientService.update(patient.Id, patientData)
-      await loadPatientData()
-      setShowEditModal(false)
-      toast.success('Patient information updated successfully')
-    } catch (error) {
-      throw error
-    }
+const handleSavePatient = async (patientData) => {
+    await patientService.update(patient.Id, patientData)
+    await loadPatientData()
+    setShowEditModal(false)
+    toast.success('Patient information updated successfully')
   }
 
   const getAge = (dateOfBirth) => {

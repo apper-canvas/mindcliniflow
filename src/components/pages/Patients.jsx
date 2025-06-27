@@ -78,36 +78,34 @@ const Patients = () => {
 
     // Sort patients
     return filtered.sort((a, b) => {
-      switch (sortBy) {
+switch (sortBy) {
         case 'name':
           return `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
-        case 'recent':
+        case 'recent': {
           const aDate = a.lastVisit ? new Date(a.lastVisit) : new Date(0)
           const bDate = b.lastVisit ? new Date(b.lastVisit) : new Date(0)
           return bDate - aDate
-        case 'oldest':
+        }
+        case 'oldest': {
           const aCreated = new Date(a.createdAt || 0)
           const bCreated = new Date(b.createdAt || 0)
           return aCreated - bCreated
+        }
         default:
           return 0
       }
     })
   }, [patients, searchTerm, sortBy])
 
-  const handleSavePatient = async (patientData) => {
-    try {
-      if (selectedPatient) {
-        await patientService.update(selectedPatient.Id, patientData)
-      } else {
-        await patientService.create(patientData)
-      }
-      await loadData()
-      setShowModal(false)
-      setSelectedPatient(null)
-    } catch (error) {
-      throw error
+const handleSavePatient = async (patientData) => {
+    if (selectedPatient) {
+      await patientService.update(selectedPatient.Id, patientData)
+    } else {
+      await patientService.create(patientData)
     }
+    await loadData()
+    setShowModal(false)
+    setSelectedPatient(null)
   }
 
   const handleEditPatient = (patient) => {
