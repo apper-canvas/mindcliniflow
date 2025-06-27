@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Button from '@/components/atoms/Button'
 import Input from '@/components/atoms/Input'
@@ -19,7 +19,10 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
   })
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
-
+  const [isInteracting, setIsInteracting] = useState(false)
+  const [lastInteraction, setLastInteraction] = useState(Date.now())
+  const modalRef = useRef(null)
+  const formRef = useRef(null)
   const statusOptions = [
     { value: 'scheduled', label: 'Scheduled' },
     { value: 'confirmed', label: 'Confirmed' },
@@ -66,10 +69,44 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
         notes: '',
         status: 'scheduled'
       })
-    }
+}
     setErrors({})
+    setIsInteracting(false)
+    setLastInteraction(Date.now())
   }, [appointment, isOpen])
 
+  // Track user interactions to prevent accidental closure
+  useEffect(() => {
+    const handleUserActivity = () => {
+      setLastInteraction(Date.now())
+    }
+
+    const handleFocusIn = () => {
+      setIsInteracting(true)
+    }
+
+    const handleFocusOut = (e) => {
+      // Only set interacting to false if focus is leaving the modal entirely
+      if (modalRef.current && !modalRef.current.contains(e.relatedTarget)) {
+        setTimeout(() => setIsInteracting(false), 100)
+      }
+    }
+
+    if (isOpen && modalRef.current) {
+      const modal = modalRef.current
+      modal.addEventListener('focusin', handleFocusIn)
+      modal.addEventListener('focusout', handleFocusOut)
+      modal.addEventListener('click', handleUserActivity)
+      modal.addEventListener('keydown', handleUserActivity)
+      
+      return () => {
+        modal.removeEventListener('focusin', handleFocusIn)
+        modal.removeEventListener('focusout', handleFocusOut)
+        modal.removeEventListener('click', handleUserActivity)
+        modal.removeEventListener('keydown', handleUserActivity)
+      }
+    }
+  }, [isOpen])
   const validateForm = () => {
     const newErrors = {}
     
@@ -114,14 +151,31 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
     }
   }
 
-  const handleChange = (field, value) => {
+const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
     }
+    setLastInteraction(Date.now())
   }
 
-  return (
+  const handleBackdropClick = (e) => {
+    // Prevent accidental closure when user is actively interacting with form
+    if (e.target === e.currentTarget && !isInteracting && !loading) {
+      const timeSinceLastInteraction = Date.now() - lastInteraction
+      // Only allow backdrop close if user hasn't interacted recently (2 seconds)
+      if (timeSinceLastInteraction > 2000) {
+        onClose()
+      }
+    }
+  }
+
+  const handleExplicitClose = () => {
+    if (!loading) {
+      onClose()
+    }
+  }
+return (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -132,11 +186,12 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-              onClick={onClose}
+              onClick={handleBackdropClick}
             />
 
-            {/* Modal */}
+{/* Modal */}
             <motion.div
+              ref={modalRef}
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -147,14 +202,14 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
                   {appointment ? 'Edit Appointment' : 'Schedule Appointment'}
                 </h3>
                 <button
-                  onClick={onClose}
+                  onClick={handleExplicitClose}
                   className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                  disabled={loading}
                 >
                   <ApperIcon name="X" className="w-5 h-5" />
                 </button>
               </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
+<form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
                 <Select
                   label="Patient"
                   options={patientOptions}
@@ -224,10 +279,10 @@ const AppointmentModal = ({ isOpen, onClose, appointment, patients, onSave }) =>
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-4">
-                  <Button
+<Button
                     type="button"
                     variant="secondary"
-                    onClick={onClose}
+                    onClick={handleExplicitClose}
                     disabled={loading}
                   >
                     Cancel
