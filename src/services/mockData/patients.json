@@ -1,0 +1,124 @@
+{
+  "patientData": [
+    {
+      "Id": 1,
+      "firstName": "Sarah",
+      "lastName": "Johnson",
+      "dateOfBirth": "1985-03-15",
+      "phone": "(555) 123-4567",
+      "email": "sarah.johnson@email.com",
+      "address": "123 Oak Street, Springfield, IL 62701",
+      "emergencyContact": "Mike Johnson - (555) 123-4568",
+      "notes": "Regular patient with annual checkups. Has mild hypertension managed with medication.",
+      "createdAt": "2023-01-15T10:30:00Z"
+    },
+    {
+      "Id": 2,
+      "firstName": "Michael",
+      "lastName": "Chen",
+      "dateOfBirth": "1978-07-22",
+      "phone": "(555) 234-5678",
+      "email": "m.chen@email.com",
+      "address": "456 Pine Avenue, Springfield, IL 62702",
+      "emergencyContact": "Linda Chen - (555) 234-5679",
+      "notes": "Type 2 diabetes patient. Requires regular blood sugar monitoring and quarterly visits.",
+      "createdAt": "2023-02-10T14:15:00Z"
+    },
+    {
+      "Id": 3,
+      "firstName": "Emma",
+      "lastName": "Williams",
+      "dateOfBirth": "1992-11-08",
+      "phone": "(555) 345-6789",
+      "email": "emma.williams@email.com",
+      "address": "789 Maple Drive, Springfield, IL 62703",
+      "emergencyContact": "James Williams - (555) 345-6790",
+      "notes": "Young professional with occasional stress-related symptoms. Prefers morning appointments.",
+      "createdAt": "2023-03-05T09:45:00Z"
+    },
+    {
+      "Id": 4,
+      "firstName": "Robert",
+      "lastName": "Davis",
+      "dateOfBirth": "1955-12-03",
+      "phone": "(555) 456-7890",
+      "email": "robert.davis@email.com",
+      "address": "321 Elm Street, Springfield, IL 62704",
+      "emergencyContact": "Mary Davis - (555) 456-7891",
+      "notes": "Senior patient with arthritis and high cholesterol. Needs assistance walking to exam room.",
+      "createdAt": "2023-01-20T11:20:00Z"
+    },
+    {
+      "Id": 5,
+      "firstName": "Lisa",
+      "lastName": "Thompson",
+      "dateOfBirth": "1990-04-17",
+      "phone": "(555) 567-8901",
+      "email": "lisa.thompson@email.com",
+      "address": "654 Birch Lane, Springfield, IL 62705",
+      "emergencyContact": "David Thompson - (555) 567-8902",
+      "notes": "Pregnant patient - second trimester. Regular prenatal checkups scheduled monthly.",
+      "createdAt": "2023-04-12T13:30:00Z"
+    },
+    {
+      "Id": 6,
+      "firstName": "James",
+      "lastName": "Martinez",
+      "dateOfBirth": "1982-09-25",
+      "phone": "(555) 678-9012",
+      "email": "james.martinez@email.com",
+      "address": "987 Cedar Court, Springfield, IL 62706",
+      "emergencyContact": "Sofia Martinez - (555) 678-9013",
+      "notes": "Construction worker with history of back injuries. Regular physical therapy recommended.",
+      "createdAt": "2023-02-28T16:00:00Z"
+    },
+    {
+      "Id": 7,
+      "firstName": "Amanda",
+      "lastName": "Taylor",
+      "dateOfBirth": "1975-06-12",
+      "phone": "(555) 789-0123",
+      "email": "amanda.taylor@email.com",
+      "address": "147 Spruce Street, Springfield, IL 62707",
+      "emergencyContact": "Kevin Taylor - (555) 789-0124",
+      "notes": "Teacher with seasonal allergies. Requires allergy medication adjustments during spring/fall.",
+      "createdAt": "2023-03-18T08:15:00Z"
+    },
+    {
+      "Id": 8,
+      "firstName": "Christopher",
+      "lastName": "Anderson",
+      "dateOfBirth": "1988-01-30",
+      "phone": "(555) 890-1234",
+      "email": "chris.anderson@email.com",
+      "address": "258 Willow Road, Springfield, IL 62708",
+      "emergencyContact": "Jennifer Anderson - (555) 890-1235",
+      "notes": "IT professional with eye strain issues. Needs regular vision checkups and ergonomic advice.",
+      "createdAt": "2023-05-01T12:45:00Z"
+    },
+    {
+      "Id": 9,
+      "firstName": "Michelle",
+      "lastName": "Brown",
+      "dateOfBirth": "1965-10-18",
+      "phone": "(555) 901-2345",
+      "email": "michelle.brown@email.com",
+      "address": "369 Poplar Avenue, Springfield, IL 62709",
+      "emergencyContact": "Richard Brown - (555) 901-2346",
+      "notes": "Nurse with history of varicose veins. Wears compression stockings and needs regular leg examinations.",
+      "createdAt": "2023-01-30T15:20:00Z"
+    },
+    {
+      "Id": 10,
+      "firstName": "Daniel",
+      "lastName": "Wilson",
+      "dateOfBirth": "1995-08-07",
+      "phone": "(555) 012-3456",
+      "email": "daniel.wilson@email.com",
+      "address": "741 Ash Boulevard, Springfield, IL 62710",
+      "emergencyContact": "Patricia Wilson - (555) 012-3457",
+      "notes": "College student with anxiety issues. Counseling referrals provided and medication adjusted as needed.",
+      "createdAt": "2023-04-25T10:10:00Z"
+    }
+  ]
+}

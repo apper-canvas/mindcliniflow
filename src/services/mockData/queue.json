@@ -1,0 +1,68 @@
+{
+  "queueData": [
+    {
+      "Id": 1,
+      "appointmentId": 9,
+      "checkInTime": "2024-01-22T08:45:00Z",
+      "consultationStart": null,
+      "consultationEnd": null,
+      "status": "checked-in"
+    },
+    {
+      "Id": 2,
+      "appointmentId": 10,
+      "checkInTime": "2024-01-22T09:15:00Z",
+      "consultationStart": null,
+      "consultationEnd": null,
+      "status": "waiting"
+    },
+    {
+      "Id": 3,
+      "appointmentId": 11,
+      "checkInTime": "2024-01-22T09:50:00Z",
+      "consultationStart": "2024-01-22T10:00:00Z",
+      "consultationEnd": null,
+      "status": "in-consultation"
+    },
+    {
+      "Id": 4,
+      "appointmentId": 1,
+      "checkInTime": "2024-01-15T08:45:00Z",
+      "consultationStart": "2024-01-15T09:00:00Z",
+      "consultationEnd": "2024-01-15T09:30:00Z",
+      "status": "completed"
+    },
+    {
+      "Id": 5,
+      "appointmentId": 2,
+      "checkInTime": "2024-01-15T09:15:00Z",
+      "consultationStart": "2024-01-15T09:30:00Z",
+      "consultationEnd": "2024-01-15T10:15:00Z",
+      "status": "completed"
+    },
+    {
+      "Id": 6,
+      "appointmentId": 3,
+      "checkInTime": "2024-01-15T10:00:00Z",
+      "consultationStart": "2024-01-15T10:15:00Z",
+      "consultationEnd": "2024-01-15T10:45:00Z",
+      "status": "completed"
+    },
+    {
+      "Id": 7,
+      "appointmentId": 4,
+      "checkInTime": "2024-01-15T10:45:00Z",
+      "consultationStart": "2024-01-15T11:00:00Z",
+      "consultationEnd": "2024-01-15T12:00:00Z",
+      "status": "completed"
+    },
+    {
+      "Id": 8,
+      "appointmentId": 5,
+      "checkInTime": "2024-01-16T13:45:00Z",
+      "consultationStart": "2024-01-16T14:00:00Z",
+      "consultationEnd": "2024-01-16T14:45:00Z",
+      "status": "completed"
+    }
+  ]
+}
